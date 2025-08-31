@@ -8,6 +8,10 @@ def add(numbers_string)
         if numbers_string.start_with?("//")
             match = numbers_string.match(%r{//(.*?)\n(.*)})
             delimeter = match[1]
+            if(delimeter.start_with?("["))
+                delimeter_parts = delimeter.match(/\[(.*?)\]/)
+                delimeter = delimeter_parts[1]
+            end
             numbers_string = match[2]
         end
         numbers_string = numbers_string.split("\n").join(delimeter)
@@ -15,7 +19,7 @@ def add(numbers_string)
         numbers_array.each do |number|
             integer_number = number.to_i
             if integer_number >= 0 
-                ans=ans+integer_number  if(integer_number <= 1000)
+                ans=ans+integer_number if(integer_number<=1000)
             else
                 negative_numbers.push(integer_number)
             end
@@ -38,3 +42,4 @@ puts run_test(method(:add),"//;\n1;2", 3)
 puts run_test(method(:add),"1,-2,-3", RuntimeError.new("negative numbers not allowed -2,-3"))
 puts run_test(method(:add),"1,1001,3", 4)
 puts run_test(method(:add),"1,1000,3", 1004)
+puts run_test(method(:add),"//[**]\n1**2**3",6)
